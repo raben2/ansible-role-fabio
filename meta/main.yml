@@ -10,5 +10,5 @@ galaxy_info:
         - all
   categories:
       - loadbalancer
-dependencies:
-      - raben2.ansible-golang
+dependencies: 
+  - src: git+https://github.com/raben2/ansible-golang.git
