@@ -19,6 +19,7 @@ fabio_kv_manual_routes:
 # TLS 
 fabio_tls_port: 443
 fabio_install_certificates: False
+fabio_domain_cert_store: fabio
 fabio_crt_dir: /etc/fabio/certs
 fabio_certificates:
   - example.com
@@ -28,7 +29,6 @@ fabio_install_client_certificates: False
 fabio_client_crt_dir: /etc/fabio/clientcrts
 fabio_clientca_port: 8443
 fabio_cert_store_type: file  # vault, consul not implemented yet
-fabio_domain_cert_store: fabio
 fabio_client_cert_store: client
 fabio_client_certificates:
   - example.com
