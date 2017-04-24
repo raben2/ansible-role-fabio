@@ -8,6 +8,7 @@ galaxy_info:
     - name: Centos
       versions:
         - all
-  categories:
+galaxy_tags:
+      - fabio
       - loadbalancer
       
