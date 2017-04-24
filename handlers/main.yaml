@@ -1,0 +1,13 @@
+- name: restart fabio
+  systemd: 
+    name: fabio
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+- name: start fabio
+  systemd: 
+    name: fabio
+    state: started
+    daemon_reload: yes
+    enabled: yes

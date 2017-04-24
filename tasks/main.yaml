@@ -1,0 +1,4 @@
+- include: install.yaml
+- include: certs.yaml
+  when: 
+   - fabio_install_certificates

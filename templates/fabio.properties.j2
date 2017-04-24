@@ -1,0 +1,29 @@
+#{{ ansible_managed }}
+# proxy
+{% if fabio_cert_store_type == "file" %}
+proxy.cs = \
+	     cs={{ fabio_domain_cert_store }};type=path;cert={{ fabio_crt_dir }}, \
+{% if fabio_install_client_certificates %}
+         cs={{ fabio_client_cert_store  }};type=path;cert={{ fabio_crt_dir }};clientca={{ fabio_client_crt_dir }};refresh=3s
+{% endif %}
+proxy.addr = \
+	{{ fabio_bind_ip }}:{{ fabio_http_port }}, \
+	{{ fabio_bind_ip }}:{{ fabio_tls_port }};cs={{ fabio_domain_cert_store }}, \
+{% if fabio_install_client_certificates %}
+	{{ fabio_bind_ip }}:{{ fabio_clientca_port }};cs={{ fabio_client_cert_store }}, \
+{% endif %}
+{% if fabio_sni %}
+	{{ fabio_bind_ip }}:{{ fabio_sni_port }};cs={{ fabio_client_cert_store }},proto=tcp+sni \
+{% endif %}
+{% endif %}
+
+proxy.localip = {{ fabio_bind_ip }}
+
+# consul 
+registry.consul.register.enabled = true
+registry.consul.addr = {{ fabio_consul_host }}:{{ fabio_consul_port }}
+registry.consul.kvpath = {{ fabio_route_kv }}
+registry.consul.register.addr = :{{ fabio_webif_port }}
+
+# webui
+ui.addr = :{{ fabio_webif_port }}

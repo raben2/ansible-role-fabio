@@ -1,0 +1,48 @@
+- name: add fabio group
+  group:
+    state: present
+    name: "{{ fabio_group }}"
+    gid: 9998
+  with_items:
+
+- name: add fabio group
+  user:
+    state: present
+    name: "{{ fabio_user }}"
+    shell: /bin/bash
+    group: "{{ fabio_group }}"
+    append: yes
+
+- name: "download go packages"
+  command: "{{ fabio_go_bin_dir }}/go get -u {{ fabio_pkg }}"
+  environment:
+    GO15VENDOREXPERIMENT: 1
+    GOPATH: "{{ fabio_go_pkg_dir }}"
+
+- name: create config file
+  template:
+    src: fabio.properties.j2
+    dest: /etc/fabio/fabio.properties
+  notify: restart fabio
+
+- name: create systemd file
+  template:
+    src: fabio.service.j2
+    dest: /usr/lib/systemd/system/fabio.service
+  notify: restart fabio
+
+- name: create consul kv
+  consul_kv:
+    state: present
+    key: "{{ fabio_route_kv }}"
+    host: "{{ fabio_consul_host }}"
+    port: "{{ fabio_consul_port }}"
+    value: "{{ fabio_kv_manual_routes }}"
+
+- name: enable sni without dns
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item.ip }} {{ item.domain }}"
+  with_items:
+    - "{{ fabio_sni_backends }}"
+  when: fabio_sni

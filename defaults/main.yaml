@@ -1,0 +1,41 @@
+fabio_pkg: "github.com/fabiolb/fabio"
+fabio_user: fabio
+fabio_group: fabio
+fabio_go_bin_dir: /usr/local/go/bin
+fabio_go_pkg_dir: /usr/local/go/packages
+
+# proxy
+fabio_bind_ip: 0.0.0.0
+fabio_http_port: 80
+fabio_webif_port: 9998
+
+# consul 
+fabio_consul_host: localhost
+fabio_consul_port: 8500
+fabio_route_kv: /fabio/config
+fabio_kv_manual_routes: 
+  - "route add fabio-webif fabiolb.local http:{{ fabio_bind_ip }}:{{ fabio_webif_port }}"
+
+# TLS 
+fabio_tls_port: 443
+fabio_install_certificates: False
+fabio_crt_dir: /etc/fabio/certs
+fabio_certificates:
+  - example.com
+
+# client cert auth
+fabio_install_client_certificates: False
+fabio_client_crt_dir: /etc/fabio/clientcrts
+fabio_clientca_port: 8443
+fabio_cert_store_type: file  # vault, consul not implemented yet
+fabio_domain_cert_store: fabio
+fabio_client_cert_store: client
+fabio_client_certificates:
+  - example.com
+
+# SNI
+fabio_sni: False
+fabio_sni_port: 8444
+fabio_sni_backends:
+    - domain: example.com
+      ip: 127.0.0.1

@@ -1,0 +1,42 @@
+- name: ensure cert directories
+  file:
+    state: directory
+    owner: "{{ fabio_user }}"
+    group:  "{{ fabio_group }}"
+    dest: "{{ item }}"
+    mode: 0660
+    recurse: yes
+  with_items:
+      - "{{ fabio_crt_dir }}"
+      - "{{ fabio_client_crt_dir }}"
+
+- name: upload certificates
+  copy:
+    src: "{{ item }}.crt"
+    dest: "{{ fabio_crt_dir }}/{{ item }}-cert.pem"
+    owner: "{{ fabio_user }}"
+    group: "{{ fabio_group }}"
+    mode: 0660
+  with_items:
+    - "{{ fabio_certificates }}"
+
+- name: upload certificate keys
+  copy:
+    src: "{{ item }}.key"
+    dest: "{{ fabio_crt_dir }}/{{ item }}-key.pem"
+    owner: "{{ fabio_user }}"
+    group: "{{ fabio_group }}"
+    mode: 0660
+  with_items:
+    - "{{ fabio_certificates }}"
+
+- name: upload client certificates
+  copy:
+    src: "{{ item }}.crt"
+    dest: "{{ fabio_client_crt_dir }}/{{ item }}-cert.pem"
+    owner: "{{ fabio_user }}"
+    group: "{{ fabio_group }}"
+    mode: 0660
+  with_items: 
+    - "{{ fabio_client_certificates }}"   
+  when: fabio_install_client_certificates

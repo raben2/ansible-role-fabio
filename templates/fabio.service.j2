@@ -1,0 +1,15 @@
+[Unit]
+Description=fabiolb 
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+User={{ fabio_user }}
+Group={{ fabio_group }}
+Restart=on-failure
+StandardOutput=journal
+StandardError=journal
+ExecStart={{ fabio_go_pkg_dir }}/bin/fabio -cfg /etc/fabio/fabio.properties
+
+[Install]
+WantedBy=multi-user.target
